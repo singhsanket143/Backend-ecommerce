@@ -24,8 +24,7 @@ module.exports = {
 				responseData.msg ="Successfully Logged In";
 				responseData.data = {
 					username: result[0].Username,
-					userId: result[0].UserId,
-					userType: result[0].UserType
+					userId: result[0].UserId
 				};
 				return res.status(httpCodes.success).send(responseData);
 			});
@@ -40,9 +39,10 @@ module.exports = {
 			success: false,
 			msg: "Invalid params for signup"
 		};
-		if (data.username && data.password && data.userType) {
+		if (data.username && data.password) {
 			User.getUserDetails(data, function(err, result){
 				if (err) {
+					console.log(err);
 					responseData.msg = "Error in signup";
 					return res.status(httpCodes.internalServerError).send(responseData);
 				}
@@ -50,48 +50,20 @@ module.exports = {
 					responseData.msg = "User already exists";
 					return res.status(httpCodes.internalServerError).send(responseData);
 				} else {
-					if(data.userType == 'vendor') {
-						if(data.gstin && data.pan) {
-							User.signup(data, function (err1, result1) {
-								if (err1) {
-									responseData.msg = "Error in signup";
-									return res.status(httpCodes.internalServerError).send(responseData);
-								}
-								data.vendorId = result1.insertId;
-								User.addVendorDetails(data, function(err2) {
-									if (err2) {
-										responseData.msg = "Error in signup";
-										return res.status(httpCodes.internalServerError).send(responseData);
-									}
-									responseData.success = true;
-									responseData.msg ="Successfully Signup Up";
-									responseData.data = {
-										username: data.username,
-										userId: result1.insertId,
-										userType: data.userType
-									};
-									return res.status(httpCodes.success).send(responseData);
-								});
-							});
-						} else {
-							return res.status(httpCodes.badRequest).send(responseData);
+					User.signup(data, function (err1) {
+						if (err1) {
+							console.log(err1);
+							responseData.msg = "Error in signup";
+							return res.status(httpCodes.internalServerError).send(responseData);
 						}
-					} else {
-						User.signup(data, function (err1) {
-							if (err1) {
-								responseData.msg = "Error in signup";
-								return res.status(httpCodes.internalServerError).send(responseData);
-							}
-							responseData.success = true;
-							responseData.msg ="Successfully Signup Up";
-							responseData.data = {
-								username: data.username,
-								userId: result.insertId,
-								userType: data.userType
-							};
-							return res.status(httpCodes.success).send(responseData);
-						});
-					}
+						responseData.success = true;
+						responseData.msg ="Successfully Signup Up";
+						responseData.data = {
+							username: data.username,
+							userId: result.insertId
+						};
+						return res.status(httpCodes.success).send(responseData);
+					});
 				}
 			});
 		} else {

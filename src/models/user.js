@@ -15,11 +15,10 @@ module.exports = {
 	},
 
 	signup: function(data, callback) {
-		var sql = "INSERT INTO Users (Username, Password, UserType, CreatedAt, UpdatedAt) VALUES (?, ?, ?, now(), now())";
+		var sql = "INSERT INTO Users (Username, Password, CreatedAt, UpdatedAt) VALUES (?, ?, now(), now())";
 		var values = [];
 		values.push(data.username);
 		values.push(data.password);
-		values.push(userType[data.userType]);
 		sqlConnection.executeQuery(sql, values, function(err, result) {
 			callback(err, result);
 		});
