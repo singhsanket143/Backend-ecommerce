@@ -1,22 +1,20 @@
-const Category = require("../models/category");
-const {
-	httpCodes
-} = require("../constants/backendConfig");
+const Category = require('../models/category');
 
 module.exports = {
-	listCategories: function (req, res) {
-		var responseData = {
-			success: false,
-			msg: "Error in fetching categories"
-		};
-		Category.listCategories(function (err, result) {
-			if (err) {
-				return res.status(httpCodes.internalServerError).send(responseData);
-			}
-			responseData.success = true;
-			responseData.msg ="Successfully fetched categories";
-			responseData.categories = result;
-			return res.status(httpCodes.success).send(responseData);
-		});
-	}
-};
+    listCategories: function(req, res) {
+        Category.listCategories(function(err, result) {
+            if(err) {
+                console.log(err);
+                return res.status(500).send({
+                    msg: "Error in fetching categories",
+                    success: false,
+                });
+            }
+            return res.status(200).send({
+                msg: "Successfully fetched catgeories", 
+                categories: result, 
+                success: true,
+            });
+        })
+    }
+}
