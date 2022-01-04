@@ -1,7 +1,9 @@
 const Product = require("../models/product");
 
 function listProducts(req, res) {
+    // console.log(req);
     let data = req.body;
+    console.log(typeof req.body.categoryId);
     Product.listProducts(data, function(err, result) {
         if(err) {
             console.log(err);
