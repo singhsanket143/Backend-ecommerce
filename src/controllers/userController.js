@@ -54,9 +54,11 @@ function login(req, res) {
             }
             responseData.success = true;
             responseData.msg = "Successfully logged in ";
+            console.log(result);
             responseData.data = {
                 username: result[0].Username,
-                userId: result[0].UserId
+                userId: result[0].UserId,
+                authToken: result[0].authToken
             };
             return res.status(200).send(responseData);
         })
