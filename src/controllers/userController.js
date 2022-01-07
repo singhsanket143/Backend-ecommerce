@@ -17,7 +17,7 @@ function signup(req, res) {
                 responseData.msg = "User already exists";
                 return res.status(500).send(responseData);
             } else {
-                User.signup(data, function(err1, result1) {
+                User.strongSignup(data, function(err1, result1) {
                     if(err1) {
                         return res.status(500).send(responseData);
                     }
@@ -42,7 +42,7 @@ function login(req, res) {
         msg: "Invalid details for signup"
     };
     if(data.username && data.password) {
-        User.login(data, function(err, result) {
+        User.strongLogin(data, function(err, result) {
             if(err) {
                 console.log(err);
                 responseData.msg = "Error in signin";
