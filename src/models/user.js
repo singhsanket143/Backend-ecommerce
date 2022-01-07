@@ -82,4 +82,15 @@ function strongLogin(data, cb) {
     });
 }
 
-module.exports = {signup, getUsersSignupDetails, login, strongSignup, strongLogin};
+function getUserById(id, cb) {
+    let sql = `SELECT ID as UserId, Username, UserType 
+               FROM Users WHERE 
+               ID = ?`;
+    let values = [];
+    values.push(id);
+    sqlConnection.executeQuery(sql, values, function(err, result) {
+        cb(err, result);
+    });
+}
+
+module.exports = {signup, getUsersSignupDetails, getUserById,login, strongSignup, strongLogin};

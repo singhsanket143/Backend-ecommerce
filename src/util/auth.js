@@ -7,4 +7,15 @@ function newToken(user) {
     });
 }
 
-module.exports = {newToken};
+function verifyToken(token) {
+    try {
+        let response = jwt.verify(token, 'relevel');
+        return response;
+    } catch(err) {
+        console.log(err);
+        return;
+    }
+}
+
+
+module.exports = {newToken, verifyToken};
