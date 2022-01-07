@@ -21,4 +21,16 @@ function getUsersSignupDetails(data, cb) {
     });
 }
 
-module.exports = {signup, getUsersSignupDetails};
+function login(data, cb) {
+    let sql = `SELECT ID as UserId, Username, UserType 
+               FROM Users WHERE 
+               Username = ? AND Password = ?`;
+    let values = [];
+    values.push(data.username);
+    values.push(data.password);
+    sqlConnection.executeQuery(sql, values, function(err, result) {
+        cb(err, result);
+    });
+}
+
+module.exports = {signup, getUsersSignupDetails, login};
