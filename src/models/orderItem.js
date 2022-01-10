@@ -7,7 +7,7 @@ function addOrderItem(data, cb) {
     var values = [];
     values.push(data.orderId);
     values.push(data.productId);
-    values.push(data.quanitity);
+    values.push(data.quantity);
     sqlConnection.executeQuery(sql, values, function(err, result) {
         cb(err, result);
     });

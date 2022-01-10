@@ -93,4 +93,69 @@ function getOrderDetails(req, res) {
     }
 }
 
-module.exports = {getOrderDetails, createOrder};
+function editOrder(req, res) {
+    let data = req.body;
+    let responseData = {
+        success: false,
+        msg: "Invalid params for updating order details"
+    };
+    if(data.orderId && data.userId && data.productId) {
+        Product.getProductDetails(data, function(err, product) {
+            if(err) {
+                console.log(err);
+                return res.status(500).send(responseData);
+            }
+            OrderDetails.getOrderDetails(data, function(err1, orderDetail) {
+                if(data.remove) {
+                    if(err1) {
+                        console.log(err1);
+                        return res.status(500).send(responseData);
+                    }
+                    OrderItem.editOrderItem(data, function(err2, orderItem) {
+                        if(err2) {
+                            console.log(err2);
+                            return res.status(500).send(responseData);
+                        }
+                        data.total = orderDetail[0].total - (product[0].price * parseInt(data.quantity, 10));
+                        OrderDetails.editOrder(data, function(err3, updatedOrder) {
+                            if(err3) {
+                                console.log(err3);
+                                return res.status(500).send(responseData);
+                            }
+                            responseData.success = true;
+                            responseData.msg = "Successfully updated order";
+                            return res.status(200).send(responseData);
+                        })
+                    })
+                } else {
+                    OrderItem.editOrderItem(data, function(err2, orderItem) {
+                        if(err2) {
+                            console.log(err2);
+                            return res.status(500).send(responseData);
+                        }
+                        let productTotal = 0;
+                        orderDetail.forEach(item => {
+                            if(item.productId == data.productId) {
+                                productTotal += item.price * item.quantity;
+                            }
+                        });
+                        data.total = orderDetail[0].total - productTotal + (parseInt(data.quantity, 10)*product[0].price);
+                        OrderDetails.editOrder(data, function(err3, updatedOrder) {
+                            if(err3) {
+                                console.log(err3);
+                                return res.status(500).send(responseData);
+                            }
+                            responseData.success = true;
+                            responseData.msg = "Successfully updated order";
+                            return res.status(200).send(responseData);
+                        });
+                    })
+                }
+            })
+        })
+    } else {
+        return res.status(400).send(responseData);
+    }
+}
+
+module.exports = {getOrderDetails, createOrder, editOrder};
