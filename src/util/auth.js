@@ -17,5 +17,4 @@ function verifyToken(token) {
     }
 }
 
-
 module.exports = {newToken, verifyToken};

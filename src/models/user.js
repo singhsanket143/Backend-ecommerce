@@ -65,7 +65,7 @@ function strongLogin(data, cb) {
         const isValidPass = bcrypt.compareSync(data.password, result[0].Password);
 
         if(isValidPass) {
-            const token = auth.newToken(result);
+            const token = auth.newToken(result[0]);
             const response = [
                 {
                     UserId: result[0].UserId,
