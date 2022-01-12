@@ -39,7 +39,7 @@ function createOrder(req, res) {
                             responseData.msg = "Successfully created an order";
                             responseData.success = true;
                             responseData.orderDetails = {
-                                orderId: order[0].Id
+                                orderId: order[0].ID
                             }
                             return res.status(200).send(responseData);
                         })
